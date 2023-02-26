@@ -1,0 +1,25 @@
+public class GmailCallout {
+    
+    public static void sendEmail(){
+        
+        String message = 'Hi\n We have succesfully integrated SF with Gmail API.';
+        String fromEmail = 'nishankg33@gmail.com';
+        String toEmail = 'nishank@engineer.com';
+        String subject = 'Gmail SF Integration';
+        
+        HttpRequest req = new HttpRequest();  
+        req.setEndpoint('callout:Gmail/gmail/v1/users/me/messages/send');
+        String str = 'Content-Type: text/plain; charset="UTF-8"\nMINE-Version: 1.0\nContent-Transfer-Encoding: 7bit\nto: '+toEmail+'\nfrom: '+fromEmail+'\nsubject: '+subject+'\n\n'+message;
+        Blob inputBlob = Blob.valueOf(str);  
+        String bodyFormatRaw = EncodingUtil.base64Encode(inputBlob);
+        
+        req.setHeader('Accept','Application/json');  
+        req.setHeader('Content-Type','Application/json');  
+        req.setMethod('POST');  
+        String jsonString = '{ "raw": "'+bodyFormatRaw+'" }';
+        req.setBody(jsonString);
+        Http https = new Http();
+        HttpResponse res = new HttpResponse();
+        res = https.send(req);  
+    }
+}
